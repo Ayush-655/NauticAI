@@ -13,7 +13,7 @@ Built for an MLH hackathon. Open source under the MIT license.
 > Note: the model classifies tiles, so the outline is an estimate (model + dark-pixel refinement), not a pixel-level segmentation model. Dark look-alikes (low wind, algae) can cause false alarms; results are meant for analyst review.
 
 ## Run it yourself
-1. Train or obtain the model file `oil_spill_efficientnet_b0.pth` (see `notebooks/nauticeye.ipynb`) and put it in your Google Drive (`MyDrive`).
+1. Train or obtain the model file `oi detection/notebooks/nauticeye(4).ipynb` (see `notebooks/nauticeye.ipynb`) and put it in your Google Drive (`MyDrive`).
 2. Open a new Google Colab notebook, set **Runtime → T4 GPU**, run `!pip install -q -U sympy fastapi uvicorn python-multipart nest_asyncio`, then **Runtime → Restart session**.
 3. Paste `backend/colab_backend.py` into a cell (delete its first `!pip` line), run it, and copy the printed `https://....trycloudflare.com` URL.
 4. Open `ai detection/analyze.html` (locally or hosted) and paste that URL into the API URL box.
@@ -30,5 +30,9 @@ The tunnel URL changes each time Colab restarts.
 - Scene demo: Copernicus Sentinel-1 data (ESA), downloaded via ASF.
 - Model: EfficientNet-B0 (Tan & Le, 2019) via torchvision.
 
-## Team
-Add your team names here.
+## Team RAW ONIONS
+ARYAN SHUKLA
+ANSHUMAN SENGAR
+HARSHIT CHATURVEDI
+PARIDHI VISHWAKARMA
+
