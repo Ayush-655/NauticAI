@@ -31,14 +31,16 @@ NauticEye's AI model runs on a Google Colab server, and the website reaches it t
 3. Open the website (`ai detection/analyze.html`), paste the new link into the **API URL** box at the top, and click **Detect oil**.
 
 
-## Recreate the API yourself
-1. Click the **Open In Colab** button above.
-2. **Runtime → Change runtime type → T4 GPU.**
-3. Run Cell 1 (it restarts the session, which is expected), then run Cell 2.
-4. Copy the API URL it prints and paste it into the API URL box on the website (`ai detection/analyze.html`).
+## AI Model API Setup
 
-The trained model is in `models/`. To train your own, use `ai detection/notebooks/`.
-The link has no `/` or extra text at the end. To confirm the server is up, open `<your link>/health`. It should show `{"status":"ok"}`.
+1. Download **`oil_spill_efficientnet_b0(1).pth`** from the project's **Models** section and upload it to your Google Drive.
+2. Open **`Untitled1.ipynb`** in Google Colab and connect/mount your Google Drive.
+3. Locate the uploaded `.pth` file and update the notebook with its correct **Google Drive path**.
+4. Skip/delete the **pip installation/download section** and keep the model and API code unchanged.
+5. Run the **main model/API block** and wait for the AI model to load successfully.
+6. Copy the **newly generated AI API key** provided by the notebook.
+7. Open **`nautieyes.netlify.app`**, paste the API key into the required configuration, and save it.
+8. The NauticEye frontend can now communicate with the trained **oil-spill detection model** through the API.
 
 No API keys are stored in this repository. If the server is offline, see the demo video: **[add your video link]**.
 ## Repository layout
