@@ -34,5 +34,5 @@ The tunnel URL changes each time Colab restarts.
 Aryan Shukla, 
 Anshuman Sengar, 
 Harshit Chaturvedi, 
-Pridhi Vishwakarma
+Paridhi Vishwakarma
 
