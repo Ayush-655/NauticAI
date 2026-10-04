@@ -30,6 +30,14 @@ NauticEye's AI model runs on a Google Colab server, and the website reaches it t
 2. Wait until it prints a new link ending in `trycloudflare.com` (or your ngrok domain).
 3. Open the website (`ai detection/analyze.html`), paste the new link into the **API URL** box at the top, and click **Detect oil**.
 
+
+## Recreate the API yourself
+1. Click the **Open In Colab** button above.
+2. **Runtime → Change runtime type → T4 GPU.**
+3. Run Cell 1 (it restarts the session, which is expected), then run Cell 2.
+4. Copy the API URL it prints and paste it into the API URL box on the website (`ai detection/analyze.html`).
+
+The trained model is in `models/`. To train your own, use `ai detection/notebooks/`.
 The link has no `/` or extra text at the end. To confirm the server is up, open `<your link>/health`. It should show `{"status":"ok"}`.
 
 No API keys are stored in this repository. If the server is offline, see the demo video: **[add your video link]**.
