@@ -10,7 +10,7 @@ Built for an MLH hackathon. Open source under the MIT license.
 3. **Backend:** FastAPI server (`backend/colab_backend.py`) runs on a Google Colab T4 GPU and is exposed via a Cloudflare quick tunnel.
 4. **Frontend:** a single static page (`index.html`) deployed on Netlify. Upload an image, see the verdict, before/after slider, probability map and region table.
 
-> Note: the model classifies tiles, so the outline is an estimate (model + dark-pixel refinement), not a pixel-level segmentation model. Dark look-alikes (low wind, algae) can cause false alarms; results are meant for analyst review.
+
 
 ## Run it yourself
 1. Train or obtain the model file `oi detection/notebooks/nauticeye(4).ipynb` (see `notebooks/nauticeye.ipynb`) and put it in your Google Drive (`MyDrive`).
