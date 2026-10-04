@@ -16,16 +16,15 @@ Built for an MLH hackathon. Open source under the MIT license.
 1. Train or obtain the model file `oil_spill_efficientnet_b0.pth` (see `notebooks/nauticeye.ipynb`) and put it in your Google Drive (`MyDrive`).
 2. Open a new Google Colab notebook, set **Runtime → T4 GPU**, run `!pip install -q -U sympy fastapi uvicorn python-multipart nest_asyncio`, then **Runtime → Restart session**.
 3. Paste `backend/colab_backend.py` into a cell (delete its first `!pip` line), run it, and copy the printed `https://....trycloudflare.com` URL.
-4. Open `index.html` (locally or hosted) and paste that URL into the API URL box.
+4. Open `ai detection/analyze.html` (locally or hosted) and paste that URL into the API URL box.
 
 The tunnel URL changes each time Colab restarts.
 
 ## Repository layout
-- `index.html`: frontend
-- `backend/colab_backend.py`: inference API
-- `notebooks/nauticeye.ipynb`: training and Kochi scene analysis
-- `LICENSE`: MIT
-
+   - `ai detection/analyze.html`: frontend nauticeyes.netlify.app
+   - `backend/colab_backend.py`: inference API
+   - `ai detection/notebooks/`: training and Kochi scene analysis
+   - `LICENSE`: MIT
 ## Data and credits
 - Training data: [Sentinel-1 SAR Oil Spill Detection Dataset](https://www.kaggle.com/datasets/harikrishnacs/sentinel-1-sar-oil-spill-detection-dataset) (CC BY-SA 4.0), derived from CSIRO researchers' work. Credit them if you reuse it.
 - Scene demo: Copernicus Sentinel-1 data (ESA), downloaded via ASF.
