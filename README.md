@@ -30,9 +30,9 @@ The tunnel URL changes each time Colab restarts.
 - Scene demo: Copernicus Sentinel-1 data (ESA), downloaded via ASF.
 - Model: EfficientNet-B0 (Tan & Le, 2019) via torchvision.
 
-## Team RAW ONIONS
-ARYAN SHUKLA
-ANSHUMAN SENGAR
-HARSHIT CHATURVEDI
-PARIDHI VISHWAKARMA
+## Team RawOnions
+Aryan Shukla, 
+Anshuman Sengar, 
+Harshit Chaturvedi, 
+Pridhi Vishwakarma
 
