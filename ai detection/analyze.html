@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oil Spill Detector</title>
+<style>
+  body{margin:0;font-family:system-ui,sans-serif;background:#0a1322;color:#e6eefc;padding:20px}
+  .wrap{max-width:900px;margin:auto;display:grid;gap:16px}
+  .card{background:#0f1b2d;border:1px solid #223552;border-radius:12px;padding:16px}
+  .drop{border:2px dashed #2f4a73;border-radius:12px;padding:28px;text-align:center;cursor:pointer}
+  input[type=text]{width:100%;padding:8px;border-radius:8px;border:1px solid #2f4a73;background:#0a1322;color:#e6eefc;box-sizing:border-box}
+  button{padding:8px 14px;border-radius:8px;border:1px solid #2f4a73;background:#2f6bff;color:#fff;cursor:pointer}
+  button.alt{background:transparent}
+  button:disabled{opacity:.5}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .stage{position:relative;line-height:0;border-radius:8px;overflow:hidden}
+  .stage img{width:100%}
+  .clip{position:absolute;inset:0}
+  .bar{position:absolute;top:0;bottom:0;width:2px;background:#fff}
+  .bad{color:#ff6b6b}.good{color:#2ecc71}
+  table{width:100%;border-collapse:collapse}td,th{padding:4px;text-align:left}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h2 style="margin-top:0">Oil Spill Detector (SAR)</h2>
+    <label>API URL (from Colab):</label>
+    <input type="text" id="api" value="https://measuring-fortune-international-closing.trycloudflare.com">
+    <div class="drop" id="drop" style="margin-top:12px">Drag a SAR image here, or click to choose</div>
+    <input type="file" id="file" accept="image/*" hidden>
+    <div class="row">
+      <label>Sensitivity: <span id="tv">0.50</span>
+        <input type="range" id="thr" min="0.2" max="0.9" step="0.05" value="0.5"></label>
+      <button id="go" disabled>Detect oil</button>
+    </div>
+    <p id="err" class="bad"></p>
+  </div>
+  <div id="out" style="display:none;gap:16px;display:none">
+    <div class="card" id="verdict"></div>
+    <div class="card">
+      <div class="row" style="margin:0 0 10px">
+        <button class="alt" data-v="overlay">Highlighted</button>
+        <button class="alt" data-v="original">Original</button>
+        <button class="alt" data-v="heatmap">Probability map</button>
+        <button class="alt" data-v="mask">Mask</button>
+      </div>
+      <div class="stage" id="stage"></div>
+      <input type="range" id="split" min="0" max="100" value="50" style="width:100%;margin-top:8px">
+      <small>Slide to compare original (left) with the highlighted result (right).</small>
+    </div>
+    <div class="card" id="regions"></div>
+  </div>
+</div>
+<script>
+let file=null,res=null,view="overlay";
+const $=id=>document.getElementById(id);
+$("drop").onclick=()=>$("file").click();
+$("drop").ondragover=e=>e.preventDefault();
+$("drop").ondrop=e=>{e.preventDefault();pick(e.dataTransfer.files[0])};
+$("file").onchange=e=>pick(e.target.files[0]);
+$("thr").oninput=e=>$("tv").textContent=(+e.target.value).toFixed(2);
+$("split").oninput=draw;
+document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{view=b.dataset.v;draw()});
+function pick(f){if(!f)return;file=f;$("drop").textContent="Selected: "+f.name;$("go").disabled=false}
+$("go").onclick=async()=>{
+  $("err").textContent="";$("go").disabled=true;$("go").textContent="Analyzing...";
+  try{
+    const fd=new FormData();fd.append("file",file);fd.append("threshold",$("thr").value);
+    const r=await fetch($("api").value.replace(/\/$/,"")+"/analyze",{method:"POST",body:fd});
+    if(!r.ok)throw new Error("Server returned "+r.status);
+    res=await r.json();view="overlay";show();
+  }catch(e){$("err").textContent="Could not analyze: "+e.message+". Is the Colab cell still running and the URL current?"}
+  $("go").disabled=false;$("go").textContent="Detect oil";
+};
+function show(){
+  $("out").style.display="grid";
+  $("verdict").innerHTML=res.oil_detected
+    ?`<h2 class="bad" style="margin:0">⚠ Oil spill detected: ${res.regions.length} region(s)</h2>`
+    :`<h2 class="good" style="margin:0">✓ No oil detected</h2>`;
+  $("verdict").innerHTML+=`<p>Peak confidence <b>${(res.max_probability*100).toFixed(1)}%</b> · Area affected <b>${res.coverage_pct}%</b> · Tiles scanned <b>${res.tiles_scanned}</b> · Image <b>${res.image_size.join("×")}</b></p>`;
+  $("regions").innerHTML=res.regions.length
+    ?"<h3 style='margin-top:0'>Detected regions</h3><table><tr><th>#</th><th>Position</th><th>Area</th><th>Confidence</th></tr>"+
+      res.regions.map(r=>`<tr><td>${r.id}</td><td>${Math.round(r.centroid[0]*100)}% across, ${Math.round(r.centroid[1]*100)}% down</td><td>${r.area_pct}%</td><td>${Math.round(r.confidence*100)}%</td></tr>`).join("")+"</table>"
+    :"";
+  draw();
+}
+function draw(){
+  if(!res)return;
+  if(view==="overlay"){
+    const s=$("split").value;
+    $("stage").innerHTML=`<img src="${res.overlay}"><div class="clip" style="clip-path:inset(0 ${100-s}% 0 0)"><img src="${res.original}"></div><div class="bar" style="left:${s}%"></div>`;
+    $("split").style.display="";
+  }else{
+    $("stage").innerHTML=`<img src="${res[view]}">`;$("split").style.display="none";
+  }
+}
+</script>
+</body>
+</html>
