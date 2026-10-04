@@ -20,11 +20,26 @@ Built for an MLH hackathon. Open source under the MIT license.
 
 The tunnel URL changes each time Colab restarts.
 
+
+## ⚠️ Important: the API link must be recreated
+
+NauticEye's AI model runs on a Google Colab server, and the website reaches it through a temporary public link (the **API URL**). **This link expires whenever the Colab server stops or restarts, so it has to be recreated before the live demo will work.**
+
+**If the demo shows "Could not analyze", do this:**
+1. Open the Colab notebook and run the backend cell (`backend/colab_backend.py`) on a T4 GPU.
+2. Wait until it prints a new link ending in `trycloudflare.com` (or your ngrok domain).
+3. Open the website (`ai detection/analyze.html`), paste the new link into the **API URL** box at the top, and click **Detect oil**.
+
+The link has no `/` or extra text at the end. To confirm the server is up, open `<your link>/health`. It should show `{"status":"ok"}`.
+
+No API keys are stored in this repository. If the server is offline, see the demo video: **[add your video link]**.
 ## Repository layout
    - `ai detection/analyze.html`: frontend nauticeyes.netlify.app
    - `backend/colab_backend.py`: inference API
    - `ai detection/notebooks/`: training and Kochi scene analysis
    - `LICENSE`: MIT
+
+
 ## Data and credits
 - Training data: [Sentinel-1 SAR Oil Spill Detection Dataset](https://www.kaggle.com/datasets/harikrishnacs/sentinel-1-sar-oil-spill-detection-dataset) (CC BY-SA 4.0), derived from CSIRO researchers' work. Credit them if you reuse it.
 - Scene demo: Copernicus Sentinel-1 data (ESA), downloaded via ASF.
